@@ -10,7 +10,7 @@ mugtalk_make_2012: /usr/bin/git
 /usr/bin/git:
 	sudo apt-get install git
 
-$(rst2html):
+$(rst2html): $(easy_install)
 	sudo easy_install rst2html
 
 $(easy_install):

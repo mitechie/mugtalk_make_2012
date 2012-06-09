@@ -95,4 +95,12 @@ If we run the make open, it does all the work we need and opens the file. If
 we run it a second time, there's nothing to do. It's all peachy.
 
 Now let's say we edit the input file, the rst file, and rerun make open. What
-happens?
+happens? Now it reruns the rst2html on the updated readme.rst file. 
+
+What's cool here is that Make is only doing the work that needs to be done,
+only changing files that need to be changed. Let's say we remove the git
+checkout and rerun make open, notice that it doesn't redownload any deps, it
+only re-clones the repository, that's the only thing that's missing.
+
+So now you're starting to see some of the cool powerful bits of Make, and
+notice this is a pretty simple case, built step by step.

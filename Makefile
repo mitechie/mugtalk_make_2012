@@ -1,36 +1,35 @@
-RST2HTML := /usr/local/bin/rst2html.py
-EASY_INSTALL := /usr/local/bin/easy_install
 INPUT := mugtalk_make_2012/readme.rst
 OUTPUT := mugtalk.html
 
+define dep_targets
+  git
+  python-setuptools
+endef
 
-mugtalk_make_2012: /usr/bin/git
+deps:
+	sudo apt-get install $(strip $(dep_targets))
+
+deps-python: $(EASY_INSTALL)
+	sudo easy_install docutils lpjsmin
+
+mugtalk_make_2012: deps
 	git clone https://github.com/mitechie/mugtalk_make_2012.git
 
-/usr/bin/git:
-	sudo apt-get install git
+$(INPUT): mugtalk_make_2012
 
-$(RST2HTML): $(easy_install)
-	sudo easy_install docutils
-
-$(EASY_INSTALL):
-	sudo apt-get install python-setuptools
-
-$(INPUT): $(RST2HTML) $(EASY_INSTALL) mugtalk_make_2012
-
-$(OUTPUT): $(INPUT)
-	$(RST2HTML) $(INPUT)  > $(OUTPUT)
+$(OUTPUT): $(INPUT) deps-python
+	rst2html $(INPUT)  > $(OUTPUT)
 
 .PHONY: open
 open: $(OUTPUT)
 	xdg-open $(OUTPUT)
 
 .PHONY: clean
-clean: clean-git clean-talk clean-html
+clean: clean-deps clean-talk clean-html
 
 .PHONY: clean-git
-clean-git:
-	sudo apt-get remove git
+clean-deps:
+	sudo apt-get remove $(strip $(dep_targets))
 
 .PHONY: clean-html
 clean-html:

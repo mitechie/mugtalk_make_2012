@@ -128,3 +128,23 @@ only re-clones the repository, that's the only thing that's missing.
 
 So now you're starting to see some of the cool powerful bits of Make, and
 notice this is a pretty simple case, built step by step.
+
+
+JS Min
+-------
+
+Side trip, dep cleanup
+~~~~~~~~~~~~~~~~~~~~~~~
+- We've got a series of JS files, we want to minify and concat them to build
+- We need a minifier
+- easy_install lpjsmin /usr/local/bin/lpjsmin
+
+- reorg this to deps-python
+- downside, this will always run, even if installed
+- cleaner and not that expensive
+- Let's use define to generate the list of deps so we can share that list among install/uninstall
+
+- Notice that it's a bunch of newlines, we can use the build int $(strip) to turn that into a proper list on the command line
+
+
+Back to our 

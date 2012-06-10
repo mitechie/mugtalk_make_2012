@@ -53,7 +53,8 @@ git installed, we want to use it to pull down something. Let's grab this talk.
   talk in html format. We'd need to generate the html file from the .rst file
   in the git repo.
 
-- So we need to easy_install rst2html python tool to install a python package we need easy_install command
+- So we need to easy_install rst2html python tool to install a python package
+  we need easy_install command
 
   - /usr/local/bin/rst2html and /usr/local/bin/easy_install
   - package name is docutils
@@ -144,7 +145,67 @@ Side trip, dep cleanup
 - cleaner and not that expensive
 - Let's use define to generate the list of deps so we can share that list among install/uninstall
 
-- Notice that it's a bunch of newlines, we can use the build int $(strip) to turn that into a proper list on the command line
+- Notice that it's a bunch of newlines, we can use the build int $(strip) to
+  turn that into a proper list on the command line
 
 
-Back to our 
+Back to our quest
+~~~~~~~~~~~~~~~~~~~
+- dir of js files, let's first create a variable list of them. (using wildcard
+  function)
+- we want to have a build dir for our JS files (using $@ for our target)
+- we also want the build version of our js files (using pathsubst function)
+  - and build with $< which is the path of our first pre-req (our only case)
+- finally, we want a .min version of our js files
+
+- this is great, but sucks to have to run `make jsmin` every time we change a
+  files
+- Python tool: watchdog to run a command every time a file changes, we already
+  have a command to run: `make jsmin`
+- Add jsauto command that needs new dep watchdog, rnus watchmedo on the
+  original js directory, and auto builds for us. Notice how if we change a
+  file, the make jsmin kicks it
+
+  - jsmin required BUILD_JSFILES
+  - those come from the cp command so they're copied
+  - and jsmin re-mins the updated build directory
+
+- The lpjsmin isn't smart enough to not min already min files, so let's remove
+  them, but they might not exist, so we can ignore failures silently with the
+  `-`. This is a good fit for our -f check in clean-html so let's add it there
+  as well.
+
+
+Magic Variables:
+-----------------
+There are seven “core” automatic variables:
+- $@ The filename representing the target.
+- $% The filename element of an archive member specification.
+- $< The filename of the first prerequisite.
+- $? The names of all prerequisites that are newer than the target, separated by spaces.
+- $^ The filenames of all the prerequisites, separated by spaces. This list
+  has duplicate filenames removed since for most uses, such as compiling,
+  copying, etc., duplicates are not wanted.
+- $+ Similar to $^, this is the names of all the prerequisites separated by
+  spaces, except that $+ includes duplicates. This variable was created for
+  specific situa-tions such as arguments to linkers where duplicate values
+  have meaning.
+- $* The stem of the target filename. A stem is typically a filename without
+  its suffix.  (We’ll discuss how stems are computed later in the section
+  “Pattern Rules.”) Its use outside of pattern rules is discouraged.
+
+
+Other Makefiles
+---------------
+
+- https://github.com/mitechie/breadability/blob/master/Makefile
+- https://github.com/mitechie/bookie_parser/blob/master/Makefile
+
+Final thoughts
+---------------
+
+- Automate!
+- New users <3 this stuff
+- Make life easier for everyone
+- Great for build steps/stuff.
+- Managing project with GNU Make is a great book, get it.

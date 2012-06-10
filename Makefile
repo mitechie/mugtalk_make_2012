@@ -1,5 +1,5 @@
-rst2html := /usr/local/bin/rst2html.py
-easy_install := /usr/local/bin/easy_install
+RST2HTML := /usr/local/bin/rst2html.py
+EASY_INSTALL := /usr/local/bin/easy_install
 INPUT := mugtalk_make_2012/readme.rst
 OUTPUT := mugtalk.html
 
@@ -10,16 +10,16 @@ mugtalk_make_2012: /usr/bin/git
 /usr/bin/git:
 	sudo apt-get install git
 
-$(rst2html): $(easy_install)
-	sudo easy_install rst2html
+$(RST2HTML): $(easy_install)
+	sudo easy_install docutils
 
-$(easy_install):
+$(EASY_INSTALL):
 	sudo apt-get install python-setuptools
 
-$(INPUT): $(rst2html) $(easy_install) mugtalk_make_2012
+$(INPUT): $(RST2HTML) $(EASY_INSTALL) mugtalk_make_2012
 
 $(OUTPUT): $(INPUT)
-	$(rst2html) $(INPUT)  > $(OUTPUT)
+	$(RST2HTML) $(INPUT)  > $(OUTPUT)
 
 .PHONY: open
 open: $(OUTPUT)
@@ -34,7 +34,9 @@ clean-git:
 
 .PHONY: clean-html
 clean-html:
-	rm mugtalk.html
+	if [ -f mugtalk.html ]; then \
+		rm mugtalk.html; \
+	fi
 
 .PHONY: clean-talk
 clean-talk:

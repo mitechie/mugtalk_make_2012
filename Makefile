@@ -34,10 +34,10 @@ clean-git:
 
 .PHONY: clean-html
 clean-html:
-	if [ -f mugtalk.html ]; then \
-		rm mugtalk.html; \
+	if [ -f $(OUTPUT) ]; then \
+		rm $(OUTPUT); \
 	fi
 
 .PHONY: clean-talk
 clean-talk:
-	rm -rf $(OUTPUT)
+	rm -rf mugtalk_make_2012
